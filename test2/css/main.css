@@ -1,0 +1,3 @@
+*{margin:0; padding: 0}
+[class*="box"]{width: 150px; height: 50px; background: lightpink; text-align: center; line-height: 50px; box-sizing: border-box; border: 2px solid white; z-index: 0; user-select: none;}
+#wrap{width: 150px; margin:0 auto;background: red;}

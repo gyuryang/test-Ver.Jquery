@@ -8,10 +8,11 @@
 		if(inputval == "") return;
 		$(".list").append(`<li><label class="checkbox"></label><div></div><label class="del">x</label></li>`);
 		$(".list li").last().find("div").text(inputval);
-		$(".footer").css({"display" : "block"});
+		$(".footer").css("display" , "block");
 		$(this).val("");
 		$(".count span").text(++count);
-		$(".allcheck").text("√");
+		$(".allcheck").text("√").css("color","lightgray");
+		btn_check(false);
 		// if(only(".selected").classList[0]=='comple_btn') comple_btn();
 		// liData.push(`<li><label class="checkbox"></label><p>${inputval}</p><label class="del">x</label></li>`);
 		// setData();
@@ -28,11 +29,10 @@
 	.on("click",".clear_btn",function(){
 		$(".complete").remove();
 		if($(".list li").length == 0){
-			$(".allcheck").text("");
-			$(".allcheck").css({"color" : "lightgray"});
-			$(".footer").css({"display" : "none"});
+			$(".allcheck").text("").css("color" , "lightgray");
+			$(".footer").css("display" , "none");
 		}
-		$(this).css({"display" : "none"});
+		$(this).css("display" , "none");
 	})
 	.on("click",".allcheck",function(e){
 		let check = e.target.style.color=='black'? true : false;
@@ -40,8 +40,31 @@
 		check? $(".complete").removeClass("complete") : $(".list li").addClass("complete");
 		check? $(".checkbox").text("") : $(".checkbox").text("√");
 		check? $(".count span").text($(".list li").length.toString()) : $(".count span").text('0');
-		check? $(".clear_btn").css({"display" : "none"}) : $(".clear_btn").css({"display" : "block"});
-		console.log($(".selected").attr('class'));
+		check? $(".clear_btn").css("display" , "none") : $(".clear_btn").css("display" , "block");
+		btn_check();
 	})
+	.on("click",".checkbox",function(){
+		let check = $(this).text()==""? false : true;
+		check? $(this).text("") : $(this).text("√");
+		check? $(this).parent().removeClass("complete") : $(this).parent().addClass("complete");
+		check? count++ : count--;
+		$(".count span").text(count);
+		$(".list li").length == Number($(".count span").text())? $(".clear_btn").css("display" , "none") : $(".clear_btn").css("display" , "block");
+		count == 0? $(".allcheck").css("color","black") : $(".allcheck").css("color","lightgray");
+		btn_check();
+	})
+	.on("click",".btns li",function(){
+		btn_check(true,$(this).attr('class').split(" ")[0]);
+	})
+
+	function btn_check(t=true,btn=""){
+		let btn_name = btn==""? $(".selected").attr('class').split(" ")[0] : btn;
+		if(t){
+			$(".selected").removeClass("selected");
+			$("."+btn_name).addClass("selected");
+		}
+		btn_name=="comple_btn"? $(".list li").css("display" , "none") : $(".list li").css("display" , "block");
+		btn_name=="active_btn"? $(".complete").css("display" , "none") : $(".complete").css("display" , "block");
+	}
 
 })();
