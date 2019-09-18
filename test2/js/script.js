@@ -1,4 +1,4 @@
-
+(()=>{
 	const only = v => document.querySelector(v);
 	const all = v => Array.from(document.querySelectorAll(v));
 	let thisbox,	// mouse down한 타겟
@@ -9,10 +9,12 @@
 		thisY,
 		mouseup,
 		Run=true,
-		savenum;
+		savenum,
+		selectbox;
 	document.addEventListener("mousedown",e =>{
 		if(e.target.tagName != "DIV") return;
 		thisbox = e.target.className;
+		selectbox = thisbox;
 
 		let startX = e.offsetX;
 		let startY = e.offsetY;
@@ -39,8 +41,10 @@
 		if(mouseup) return;
 
 		mouseup = true;
-		if(thisbox != "")
-			only("."+thisbox).style = `position:absolute; left:${thisX}px; top:${thisY}px; transition:0.5s`;
+		if(thisbox != ""){
+			let boxnum = Number(thisbox.split("x")[1]);
+			only("."+thisbox).style = `position:absolute; left:${thisX}px; top:${boxnum*50-50}px; transition:0.5s`;
+		}
 		Run = true;
 		onemove();
 	});
@@ -49,7 +53,7 @@
 		if(thisX-x > 75)
 			derect.push("left");
 		if(thisX-x < -75)
-			derect.push("right")
+			derect.push("right");
 		if(thisY-y > 25)
 			derect.push("top");
 		if(thisY-y < -25)
@@ -58,7 +62,7 @@
 	}
 	// thisbox가 움직이는거
 	function onemove(){
-		let arr = new Array();
+		let arr = [];
 		arr = check();
 		let derect = arr[0];
 		// let secondDe = arr[1];
@@ -98,23 +102,26 @@
 	function down(t = true){
 		let plusnum = 1;
 		if(((y-thisY)/25)>=3){
-			plusnum = ((y-thisY)/25)%2 == 0 ? ~~((y-thisY)/25/2) : ~~((y-thisY)/25/2)+1
+			plusnum = ((y-thisY)/25)%2 == 0 ? ~~((y-thisY)/25/2) : ~~((y-thisY)/25/2)+1;
 		}
+		console.log(~~((y-thisY)/25)/2+" , plusnum = "+plusnum);
 		let boxnum = Number(thisbox.split("x")[1]);
-		let movenum = boxnum+plusnum;
+		let movenum = Number(selectbox.split("x")[1])+plusnum;
 		if(!t){
 			savenum = savenum > all("#wrap div").length ? all("#wrap div").length : savenum;
-			only(".box"+boxnum).style = `position:absolute; top:${savenum*50-50}px;`;
-			only(".box"+boxnum).className = "box"+savenum;
+			// only(".box"+boxnum).style = `position:absolute; top:${savenum*50-50}px;`;
 			return;
 		}
 		if((!Run&&savenum == movenum)||movenum>all("#wrap div").length)
 			return;
-		Run = mouseup == true ? true : false;
+		Run = mouseup;
 		savenum = movenum;
 		only(".box"+movenum).style = `position:absolute; top:${movenum*50-50}px;`;
 		setTimeout(function(){
 			only(".box"+movenum).style = `position:absolute; top:${movenum*50-100}px; transition:0.3s`;
 			only(".box"+movenum).className = "box"+(movenum-1);
+			thisbox = "box"+movenum;
+			all(".box"+boxnum)[0].className = "box"+movenum;
 		},100)
 	}
+})();
