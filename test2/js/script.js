@@ -12,9 +12,13 @@
 		savenum,
 		selectbox;
 	document.addEventListener("mousedown",e =>{
+		move = $("."+thisbox).attr('move');
 		if(e.target.tagName != "DIV") return;
+		else if(move == '0') return;
 		thisbox = e.target.className;
 		selectbox = thisbox;
+
+		$("."+thisbox).attr('move','0');
 
 		let startX = e.offsetX;
 		let startY = e.offsetY;
@@ -30,7 +34,7 @@
 			y = e.clientY-startY-2;
 			// console.log(x+" , "+y)
 			if(thisbox != "")
-				only("."+thisbox).style = `position:absolute; left:${x}px; top:${y}px; z-index:1`;
+				only("."+thisbox).style = `left:${x}px; top:${y}px; z-index:1`;
 			if(!mouseup){
 				onmove();
 			}
@@ -42,7 +46,10 @@
 		mouseup = true;
 		if(thisbox != ""){
 			let boxnum = Number(thisbox.split("x")[1]);
-			only("."+thisbox).style = `left:592px; top:${boxnum*50-50}px; transition:0.2s`;
+			only("."+thisbox).style = `top:${boxnum*50-50}px; transition:0.1s`;
+			setTimeout(function(){
+				$("."+thisbox).attr('move','1');
+			},100)
 		}
 		Run = true;
 		onmove();
@@ -75,9 +82,9 @@
 			pullUp();
 		}else if(derect=="bottom"){
 			down(secondDe);
-		}/*else if(derect=="top"&&thisY-y > 25){
-			mouseup != true? up() : up(false);
-		}*/
+		// }else if(derect=="top"){
+		// 	up();
+		// }
 	}
 	// thisbox아닌 다른 박스들을 위로 땅기는거
 	function pullUp(){
@@ -87,39 +94,70 @@
 		minus2 = !mouseup ? 100 : 50;
 
 		for(let i = boxnum+1; i<=all("#wrap div").length; i++){
-			only(".box"+i).style = `left:592px; top:${i*50-minus2}px; transition:0.2s`;
+			only(".box"+i).style = `top:${i*50-minus2}px; transition:0.2s`;
 		}
 	}
 
 	function down(second,Exist = false){
 		let plusnum = 1;
+
 		if(((y-thisY)/25)>=3){
 			plusnum = ((y-thisY)/25)%2 == 0 ? ~~((y-thisY)/25/2) : ~~((y-thisY)/25/2)+1;
 		}
+		// let direct = second == "left"? (thisX-x)/75 : (x-thisX)/75;
+
 		let boxnum = Number(thisbox.split("x")[1]);
 		let movenum = Number(selectbox.split("x")[1])+plusnum;
+
 		if(mouseup){
 			savenum = savenum > all("#wrap div").length ? all("#wrap div").length : savenum;
 			return;
 		}
 		if((!Run&&savenum == movenum)||movenum>all("#wrap div").length)
 			return;
-		if(Exist){
-			for(let i = boxnum+1; i<=all("#wrap div").length; i++){
-				only(".box"+i).style = `left:592px; top:${i*50-50}px; transition:0.2s`;
-			}
-			only(".box"+boxnum).style = `left:592px; top:${i*50-50}px; transition:0.2s`;
-			thisbox = "box"+movenum;
-			all(".box"+boxnum)[0].className = "box"+movenum;
-		}else if(second=="right"||second=="left"){
-			pullUp();
-		}
+
 		savenum = movenum;
-		only(".box"+movenum).style = `left:592px; top:${movenum*50-100}px; transition:0.2s`;
+		only(".box"+movenum).style = ` top:${movenum*50-100}px; transition:0.2s`;
 		only(".box"+movenum).className = "box"+(movenum-1);
 		thisbox = "box"+movenum;
 		all(".box"+boxnum)[0].className = "box"+movenum;
+
 		Run = mouseup;
 
+		if(Exist){
+			for(let i = boxnum+1; i<=all("#wrap div").length; i++){
+				only(".box"+i).style = ` top:${i*50-50}px; transition:0.2s`;
+			}
+			only(".box"+boxnum).style = ` top:${i*50-50}px; transition:0.2s`;
+			thisbox = "box"+movenum;
+			all(".box"+boxnum)[0].className = "box"+movenum;
+		}
+		if(second=="right"||second=="left"){
+			pullUp();
+		}
 	}
+
+	// 컴퓨터가 사기침
+	// function up(){
+	// 	let minusnum = 1;
+
+	// 	if(((thisY-y)/25)>=3){
+	// 		minusnum = ((thisY-y)/25)%2 == 0 ? ~~((thisY-y)/25/2) : ~~((thisY-y)/25/2)+1;
+	// 	}
+
+	// 	let boxnum = Number(thisbox.split("x")[1]);
+	// 	let movenum = Number(selectbox.split("x")[1])-minusnum;
+	// 	console.log(minusnum+" , movenum = "+movenum+" , boxnum = "+boxnum);
+
+	// 	if(mouseup) return;
+	// 	// if((!Run&&savenum == movenum)) return;
+
+	// 	savenum = movenum;
+	// 	only(".box"+movenum).style = ` top:${movenum*50}px; transition:0.2s`;
+	// 	only(".box"+movenum).className = "box"+(movenum+1);
+	// 	thisbox = "box"+movenum;
+	// 	all(".box"+boxnum)[1].className = "box"+movenum;
+
+	// 	Run = mouseup;
+	// }
 })();
