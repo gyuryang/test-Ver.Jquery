@@ -1,3 +1,12 @@
 *{margin:0; padding: 0}
-[class*="box"]{width: 150px; height: 50px; background: lightpink; text-align: center; line-height: 50px; box-sizing: border-box; border: 2px solid white; z-index: 0; user-select: none;}
+[class*="box"]{width: 150px; height: 50px; background: lightpink; text-align: center; line-height: 50px; box-sizing: border-box; border: 2px solid white; z-index: 0; user-select: none; position: absolute;}
+.box1{top:0;}
+.box2{top:50px;}
+.box3{top:100px;}
+.box4{top:150px;}
+.box5{top:200px;}
+.box6{top:250px;}
+.box7{top:300px;}
+.box8{top:350px;}
+.box9{top:400px;}
 #wrap{width: 150px; margin:0 auto;background: red;}
