@@ -78,7 +78,7 @@
 	.on("click",".btns li",function(){
 		btn_check(true,$(this).attr('class').split(" ")[0]);
 	})
-	.on("dblclick",".list li div",function(){
+	.on("dblclick",".list li",function(){
 		$(this).children().css("display","none");
 		$(this).css("padding","0 16px 16px 60px");
 		$(this).append(`<input type="text" value="" class="change">`);
@@ -112,6 +112,7 @@
 			$(".change").parent().remove();
 		}
 		$(".change").remove();
+		setData();
 	}
 
 	function setData(){
