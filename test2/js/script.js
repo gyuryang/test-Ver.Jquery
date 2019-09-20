@@ -2,7 +2,6 @@
 	const only = v => document.querySelector(v);
 	const all = v => Array.from(document.querySelectorAll(v));
 	let thisbox,	// mouse down한 타겟
-		mousedown = true,
 		x,
 		y,
 		thisX,
@@ -10,7 +9,11 @@
 		mouseup,
 		Run=true,
 		savenum,
-		selectbox;
+		selectbox,
+		startX,
+		startY,
+		cliX,
+		cliY;
 	document.addEventListener("mousedown",e =>{
 		move = $("."+thisbox).attr('move');
 		if(e.target.tagName != "DIV") return;
@@ -76,15 +79,15 @@
 		// 어디에도 속하지 않을  떄 다른 박스들 위치 유지
 		if((derect=="left"||derect=="right")&&secondDe=="bottom"){
 			secondDe = arr[0];
-			down(secondDe,true);
+			pullUp();
 		}else if((derect=="left"&&Run)||(derect=="right"&&Run)){
 			Run = mouseup;
 			pullUp();
 		}else if(derect=="bottom"){
 			down(secondDe);
-		// }else if(derect=="top"){
-		// 	up();
-		// }
+		}else if(derect=="top"){
+			up();
+		}
 	}
 	// thisbox아닌 다른 박스들을 위로 땅기는거
 	function pullUp(){
@@ -99,6 +102,9 @@
 	}
 
 	function down(second,Exist = false){
+		// if(second=="right"||second=="left"){
+		// 	pullUp();
+		// }
 		let plusnum = 1;
 
 		if(((y-thisY)/25)>=3){
@@ -124,40 +130,39 @@
 
 		Run = mouseup;
 
-		if(Exist){
-			for(let i = boxnum+1; i<=all("#wrap div").length; i++){
-				only(".box"+i).style = ` top:${i*50-50}px; transition:0.2s`;
-			}
-			only(".box"+boxnum).style = ` top:${i*50-50}px; transition:0.2s`;
-			thisbox = "box"+movenum;
-			all(".box"+boxnum)[0].className = "box"+movenum;
-		}
-		if(second=="right"||second=="left"){
-			pullUp();
-		}
+		// if(Exist){
+		// 	for(let i = boxnum+1; i<=all("#wrap div").length; i++){
+		// 		only(".box"+i).style = ` top:${i*50-50}px; transition:0.2s`;
+		// 	}
+		// 	only(".box"+boxnum).style = ` top:${i*50-50}px; transition:0.2s`;
+		// 	thisbox = "box"+movenum;
+		// 	all(".box"+boxnum)[0].className = "box"+movenum;
+		// }
+		
 	}
 
-	// 컴퓨터가 사기침
-	// function up(){
-	// 	let minusnum = 1;
 
-	// 	if(((thisY-y)/25)>=3){
-	// 		minusnum = ((thisY-y)/25)%2 == 0 ? ~~((thisY-y)/25/2) : ~~((thisY-y)/25/2)+1;
-	// 	}
+	function up(){
+		let minusnum = 1;
 
-	// 	let boxnum = Number(thisbox.split("x")[1]);
-	// 	let movenum = Number(selectbox.split("x")[1])-minusnum;
-	// 	console.log(minusnum+" , movenum = "+movenum+" , boxnum = "+boxnum);
+		if(((thisY-y)/25)>=3){
+			minusnum = ((thisY-y)/25)%2 == 0 ? ~~((thisY-y)/25/2) : ~~((thisY-y)/25/2)+1;
+		}
 
-	// 	if(mouseup) return;
-	// 	// if((!Run&&savenum == movenum)) return;
+		let boxnum = Number(thisbox.split("x")[1]);
+		let movenum = Number(selectbox.split("x")[1])-minusnum;
+		console.log(minusnum+" , movenum = "+movenum+" , boxnum = "+boxnum);
 
-	// 	savenum = movenum;
-	// 	only(".box"+movenum).style = ` top:${movenum*50}px; transition:0.2s`;
-	// 	only(".box"+movenum).className = "box"+(movenum+1);
-	// 	thisbox = "box"+movenum;
-	// 	all(".box"+boxnum)[1].className = "box"+movenum;
+		if(mouseup) return;
+		if((!Run&&savenum == movenum)) return;
 
-	// 	Run = mouseup;
-	// }
+		savenum = movenum;
+		only(".box"+movenum).style = ` top:${movenum*50}px; transition:0.2s`;
+		only(".box"+movenum).className = "box"+(movenum+1);
+		all(".box"+boxnum)[1].className = "box"+movenum;
+		thisbox = "box"+movenum;
+
+		Run = mouseup;
+	}
+
 })();
