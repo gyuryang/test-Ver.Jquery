@@ -112,6 +112,7 @@
 			$(".change").parent().remove();
 		}
 		$(".change").remove();
+		$(".del").css("display","");
 		setData();
 	}
 
