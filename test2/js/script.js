@@ -1,168 +1,88 @@
 (()=>{
-	const only = v => document.querySelector(v);
-	const all = v => Array.from(document.querySelectorAll(v));
-	let thisbox,	// mouse down한 타겟
-		x,
-		y,
-		thisX,
-		thisY,
-		mouseup,
-		Run=true,
-		savenum,
-		selectbox,
-		startX,
-		startY,
-		cliX,
-		cliY;
-	document.addEventListener("mousedown",e =>{
-		move = $("."+thisbox).attr('move');
-		if(e.target.tagName != "DIV") return;
-		else if(move == '0') return;
-		thisbox = e.target.className;
+	let thisbox,
+	thisX,
+	thisY,
+	selectbox,
+	mouseup,
+	Run = true;
+	$("#wrap>div").mousedown(function(e){
+		console.log($(this).attr('class'));
+		thisbox = $(this).attr('class');
 		selectbox = thisbox;
-
-		$("."+thisbox).attr('move','0');
-
+		
 		let startX = e.offsetX;
 		let startY = e.offsetY;
 
-		thisX = e.clientX-startX-2;
-		thisY = e.clientY-startY-2;
+		thisX = e.clientX - startX - 2;
+		thisY = e.clientY -	startY - 2;
 
 		mouseup = false;
 
-		window.onmousemove = e =>{
+		$(window).mousemove(function(e){
 			if(mouseup) return;
-			x = e.clientX-startX-2;
-			y = e.clientY-startY-2;
-			// console.log(x+" , "+y)
-			if(thisbox != "")
-				only("."+thisbox).style = `left:${x}px; top:${y}px; z-index:1`;
-			if(!mouseup){
-				onmove();
-			}
-		}
-	});
-	document.addEventListener("mouseup",e =>{
-		if(mouseup) return;
 
-		mouseup = true;
-		if(thisbox != ""){
+			x = e.clientX - startX - 2;
+			y = e.clientY - startY - 2;
+
+			$("."+thisbox).css({"left" : x+"px","top" : y+"px","z-index" : "1"});
+
+			if(!mouseup)
+				onmove();
+		})	
+
+		$(document).mouseup(function(e){
+			// if(mouseup) return;
+
+			mouseup = true;
+
 			let boxnum = Number(thisbox.split("x")[1]);
-			only("."+thisbox).style = `top:${boxnum*50-50}px; transition:0.1s`;
-			setTimeout(function(){
-				$("."+thisbox).attr('move','1');
-			},100)
-		}
-		Run = true;
-		onmove();
-	});
-	function check(){
-		let derect = new Array();
-		if(thisX-x > 75)
-			derect.push("left");
+			$("."+thisbox).animate({"top" : boxnum*50-50+"px"},100);
+			// Run = true;
+			onmove();
+		})
+
+	})
+
+	function check(){ // 현재 위치가 어디 방향인지를 체크함
+		let direct = new Array();
+		if(thisX - x > 75)
+			direct.push("left");
 		if(thisX-x < -75)
-			derect.push("right");
+			direct.push("right");
 		if(thisY-y > 25)
-			derect.push("top");
+			direct.push("top");
 		if(thisY-y < -25)
-			derect.push("bottom");
-		return derect;
+			direct.push("bottom");
+		return direct;
 	}
-	// thisbox가 움직이는거
-	function onmove(){
+
+	function onmove(){ // 방향을 확인하고 어떤 함수를 호출 할 지 정함
 		let arr = [];
 		arr = check();
+
 		console.log(arr);
-		let derect = arr[0];
+
+		let direct = arr[0];
 		let secondDe = arr[1];
-		// 어디에도 속하지 않을  떄 다른 박스들 위치 유지
-		if((derect=="left"||derect=="right")&&secondDe=="bottom"){
-			secondDe = arr[0];
-			pullUp();
-		}else if((derect=="left"&&Run)||(derect=="right"&&Run)){
+
+		if((direct == "left"&&Run)||(direct=="right"&&Run)){
 			Run = mouseup;
-			pullUp();
-		}else if(derect=="bottom"){
-			down(secondDe);
-		}else if(derect=="top"){
-			up();
+			upOrDown();
 		}
 	}
-	// thisbox아닌 다른 박스들을 위로 땅기는거
-	function pullUp(){
+
+	function upOrDown(check = ""){ // thisbox가 아닌 박스들을 위나 아래로 댕기는거
 		let boxnum = Number(thisbox.split("x")[1]);
-		console.log("pullup");
-		minus = mouseup ? 100 : 50;
-		minus2 = !mouseup ? 100 : 50;
+		let minus = mouseup ? 50 : 100;
 
-		for(let i = boxnum+1; i<=all("#wrap div").length; i++){
-			only(".box"+i).style = `top:${i*50-minus2}px; transition:0.2s`;
+		if(check == "up"){
+			for(let i = boxnum-1; i>0; i--){
+				$(".box"+i).animate({"top" : i*50-minus+"px"},100);
+			}
+		}else{
+			for(let i = boxnum+1; i<=$("#wrap div").length; i++){
+				$(".box"+i).animate({"top" : i*50-minus+"px"},100);
+			}
 		}
 	}
-
-	function down(second,Exist = false){
-		// if(second=="right"||second=="left"){
-		// 	pullUp();
-		// }
-		let plusnum = 1;
-
-		if(((y-thisY)/25)>=3){
-			plusnum = ((y-thisY)/25)%2 == 0 ? ~~((y-thisY)/25/2) : ~~((y-thisY)/25/2)+1;
-		}
-		// let direct = second == "left"? (thisX-x)/75 : (x-thisX)/75;
-
-		let boxnum = Number(thisbox.split("x")[1]);
-		let movenum = Number(selectbox.split("x")[1])+plusnum;
-
-		if(mouseup){
-			savenum = savenum > all("#wrap div").length ? all("#wrap div").length : savenum;
-			return;
-		}
-		if((!Run&&savenum == movenum)||movenum>all("#wrap div").length)
-			return;
-
-		savenum = movenum;
-		only(".box"+movenum).style = ` top:${movenum*50-100}px; transition:0.2s`;
-		only(".box"+movenum).className = "box"+(movenum-1);
-		thisbox = "box"+movenum;
-		all(".box"+boxnum)[0].className = "box"+movenum;
-
-		Run = mouseup;
-
-		// if(Exist){
-		// 	for(let i = boxnum+1; i<=all("#wrap div").length; i++){
-		// 		only(".box"+i).style = ` top:${i*50-50}px; transition:0.2s`;
-		// 	}
-		// 	only(".box"+boxnum).style = ` top:${i*50-50}px; transition:0.2s`;
-		// 	thisbox = "box"+movenum;
-		// 	all(".box"+boxnum)[0].className = "box"+movenum;
-		// }
-		
-	}
-
-
-	function up(){
-		let minusnum = 1;
-
-		if(((thisY-y)/25)>=3){
-			minusnum = ((thisY-y)/25)%2 == 0 ? ~~((thisY-y)/25/2) : ~~((thisY-y)/25/2)+1;
-		}
-
-		let boxnum = Number(thisbox.split("x")[1]);
-		let movenum = Number(selectbox.split("x")[1])-minusnum;
-		console.log(minusnum+" , movenum = "+movenum+" , boxnum = "+boxnum);
-
-		if(mouseup) return;
-		if((!Run&&savenum == movenum)) return;
-
-		savenum = movenum;
-		only(".box"+movenum).style = ` top:${movenum*50}px; transition:0.2s`;
-		only(".box"+movenum).className = "box"+(movenum+1);
-		all(".box"+boxnum)[1].className = "box"+movenum;
-		thisbox = "box"+movenum;
-
-		Run = mouseup;
-	}
-
 })();
