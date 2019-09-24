@@ -28,9 +28,9 @@
 
 		thisX = e.clientX - startX - 2;
 		thisY = e.clientY -	startY - 2;
-
+		console.log(thisX);
 		mouseup = false;
-
+		document.querySelector("#wrap").style.position = "";
 		$(window).mousemove(function(e){
 			if(mouseup) return;
 
@@ -50,7 +50,8 @@
 
 			let boxnum = Number(thisbox.split("x")[1]);
 			pullUp("mouse",arr);
-			$("."+thisbox).css({"left" : "592px", "top" : boxnum*50-50+"px","transition" : "0.1s","z-index" : "0"}); // position을 계속 지정하면 left 지정 필요 X
+			$("."+thisbox).css({left : thisX+"px" , "top" : boxnum*50-50+"px","transition" : "0.1s","z-index" : "0"}); // position을 계속 지정하면 left 지정 필요 X
+			// document.querySelector("."+thisbox).style.left = "";
 			Run = true;
 			onmove();
 		})
@@ -93,7 +94,7 @@
 			list.map((v,idx)=>{
 				$("#wrap div").eq(idx).attr("class",list[idx]);
 			})
-			$(".box"+startnum).animate({"left" : "592px","top" : startnum*50-50+"px"},100);
+			$(".box"+startnum).animate({left : thisX+"px","top" : startnum*50-50+"px"},100);
 		}
 		let boxnum = Number(thisbox.split("x")[1]);
 
