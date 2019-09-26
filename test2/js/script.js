@@ -59,9 +59,9 @@
 
 	function check(){ // 현재 위치가 어디 방향인지를 체크함
 		let direct = new Array();
-		if(thisX - x > 75)
+		if(thisX - x > 125)
 			direct.push("left");
-		if(thisX - x < -75)
+		if(thisX - x < -125)
 			direct.push("right");
 		if(thisY - y > 25)
 			direct.push("top");
