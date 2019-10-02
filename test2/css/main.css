@@ -2,25 +2,12 @@
 body,html{width: 100%; height: 100%;}
 #wrap{width: 250px; margin:0 auto;background: red; padding: 8px 8px 0; background-color: rgb(235, 236, 240); border-width: 8px;
 transition: background-color 0.2s ease 0s, opacity 0.1s ease 0s; display: flex; flex-direction: column; opacity: inherit; user-select: none; height: 1166px; }
-#wrap div img{width: 40px; height: 40px; border-radius: 50%; flex-grow: 0; flex-shrink: 0; -webkit-box-flex: 0; float:left; padding: 8px;}
+#wrap section img{width: 40px; height: 40px; border-radius: 50%; flex-grow: 0; flex-shrink: 0; -webkit-box-flex: 0; float:left; padding: 8px;}
 
 [class*="box"]{width: 250px; display: inline; background: lightpink; text-align: center; box-sizing: border-box; 
  z-index: 0; user-select: none; padding-bottom: 8px; margin-bottom: 8px; background: white; position: absolute;}
-.box1{top:8px;}
-.box2{top:90px;}
-.box3{top:200px;}
-.box4{top:290px;}
-/*.box5{top:200px;}
-.box6{top:250px;}
-.box7{top:300px;}
-.box8{top:350px;}
-.box9{top:400px;}
-.box10{top:450px;}
-.box11{top:500px;}
-.box12{top:550px;}*/
 
-
-.bwrap{-webkit-box-flex:1; flex-grow: 1; flex-basis: 100%; display: flex; flex-direction: column; width: 182px; font-size: 14px; text-align: left; padding-top: 8px;}
+[class*="wrapbx"]{-webkit-box-flex:1; flex-grow: 1; flex-basis: 100%; display: flex; flex-direction: column; width: 182px; font-size: 14px; text-align: left; padding-top: 8px;}
 .top::before{content: open-quote;}
 .top::after{content: close-quote;}
 
