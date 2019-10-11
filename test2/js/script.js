@@ -15,12 +15,19 @@
 	m=0,
 	distance = [];
 
+
+	//이동하는게 이상함 교체하는 부분
+
 	distance.push(0);
-	for(let i=0; i<=$("#wrap section").length; i++){
+	for(let i=0; i<=$("#wrap section").length; i++){ // 시작 위치 맞추고 위치 저장
 		m = m == 0? 8 : m+$(".box"+i).height()+16;
 		distance.push(m);
 		$(".box"+(i+1)).css('top',m);
 	}
+	distance.map(v=>{
+		console.log(v);
+	})
+
 	$(document).on("mousedown","#wrap section",function(e){
 		thisbox = $(this).attr('class');
 		selectbox = thisbox;
@@ -38,6 +45,7 @@
 		console.log(e.clientX + " , " + e.clientY);
 
 		thisX = e.clientX - startX - 2;
+		console.log(thisX);
 		thisY = e.clientY -	startY - 2;
 		// console.log(thisX);
 		mouseup = false;
@@ -132,7 +140,7 @@
 		let moveleng = y-thisY;
 		let idx = boxnum;
 		while(moveleng>0){
-			moveleng -= (heiarr[idx]/2);
+			moveleng -= (heiarr[idx]/2); 
 			plusnum++;
 			if(moveleng<=0) return;
 			moveleng -= (heiarr[idx]/2);
@@ -165,7 +173,7 @@
 			thisbox = "box"+movenum;
 
 			$(".box"+boxnum).attr('class',"box"+movenum);
-			$(".cbox").attr("class","box"+(movenum-plusnum));
+			$(".cbox").attr("class","box"+boxnum);
 		}else{ // 한번에 많이 이동할경우
 			$(".box"+boxnum).attr('class','cbox');
 
